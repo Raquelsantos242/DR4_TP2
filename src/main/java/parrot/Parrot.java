@@ -19,34 +19,37 @@ public class Parrot {
     }
 
     public double getSpeed() {
-        return switch (type) {
-            case EUROPEAN -> europeSpeed();
-            case AFRICAN -> africanSpeed();
-            case NORWEGIAN_BLUE -> norwegianBlueSpeed();
-        };
-    }
+        switch (type) {
+            case EUROPEAN:
+                return BASE_SPEED;
 
-    private double europeSpeed() {
-        return BASE_SPEED;
-    }
+            case AFRICAN:
+                double load = LOAD_FACTOR * numberOfCoconuts;
+                double result = BASE_SPEED - load;
+                return Math.max(0, result);
 
-    private double africanSpeed() {
-        double adjusted = BASE_SPEED - LOAD_FACTOR * numberOfCoconuts;
-        return Math.max(0, adjusted);
-    }
+            case NORWEGIAN_BLUE:
+                if (isNailed) {
+                    return 0;
+                }
+                double speed = BASE_SPEED * voltage;
+                return Math.min(MAX_VOLTAGE_SPEED, speed);
 
-    private double norwegianBlueSpeed() {
-        if (isNailed) {
-            return 0;
+            default:
+                throw new IllegalStateException("Tipo desconhecido: " + type);
         }
-        return Math.min(MAX_VOLTAGE_SPEED, voltage * BASE_SPEED);
     }
 
     public String getCry() {
-        return switch (type) {
-            case EUROPEAN -> "Sqoork!";
-            case AFRICAN -> "Sqaark!";
-            case NORWEGIAN_BLUE -> voltage > 0 ? "Bzzzzzz" : "...";
-        };
+        switch (type) {
+            case EUROPEAN:
+                return "Sqoork!";
+            case AFRICAN:
+                return "Sqaark!";
+            case NORWEGIAN_BLUE:
+                return voltage > 0 ? "Bzzzzzz" : "...";
+            default:
+                throw new IllegalStateException("Tipo desconhecido: " + type);
+        }
     }
 }
