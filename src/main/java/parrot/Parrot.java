@@ -19,37 +19,50 @@ public class Parrot {
     }
 
     public double getSpeed() {
-        switch (type) {
-            case EUROPEAN:
-                return BASE_SPEED;
+        return switch (type) {
+            case EUROPEAN -> getEuropeanSpeed();
+            case AFRICAN -> getAfricanSpeed();
+            case NORWEGIAN_BLUE -> getNorwegianBlueSpeed();
+            default -> throw new IllegalStateException("Tipo desconhecido: " + type);
+        };
+    }
 
-            case AFRICAN:
-                double load = LOAD_FACTOR * numberOfCoconuts;
-                double result = BASE_SPEED - load;
-                return Math.max(0, result);
+    private double getEuropeanSpeed() {
+        return BASE_SPEED;
+    }
 
-            case NORWEGIAN_BLUE:
-                if (isNailed) {
-                    return 0;
-                }
-                double speed = BASE_SPEED * voltage;
-                return Math.min(MAX_VOLTAGE_SPEED, speed);
+    private double getAfricanSpeed() {
+        double coconutLoad = LOAD_FACTOR * numberOfCoconuts;
+        double speedAfterLoad = BASE_SPEED - coconutLoad;
+        return Math.max(0, speedAfterLoad);
+    }
 
-            default:
-                throw new IllegalStateException("Tipo desconhecido: " + type);
+    private double getNorwegianBlueSpeed() {
+        if (isNailed) {
+            return 0;
         }
+        double voltageSpeed = BASE_SPEED * voltage;
+        return Math.min(MAX_VOLTAGE_SPEED, voltageSpeed);
     }
 
     public String getCry() {
-        switch (type) {
-            case EUROPEAN:
-                return "Sqoork!";
-            case AFRICAN:
-                return "Sqaark!";
-            case NORWEGIAN_BLUE:
-                return voltage > 0 ? "Bzzzzzz" : "...";
-            default:
-                throw new IllegalStateException("Tipo desconhecido: " + type);
-        }
+        return switch (type) {
+            case EUROPEAN -> getEuropeanCry();
+            case AFRICAN -> getAfricanCry();
+            case NORWEGIAN_BLUE -> getNorwegianBlueCry();
+            default -> throw new IllegalStateException("Tipo desconhecido: " + type);
+        };
+    }
+
+    private String getEuropeanCry() {
+        return "Sqoork!";
+    }
+
+    private String getAfricanCry() {
+        return "Sqaark!";
+    }
+
+    private String getNorwegianBlueCry() {
+        return voltage > 0 ? "Bzzzzzz" : "...";
     }
 }
